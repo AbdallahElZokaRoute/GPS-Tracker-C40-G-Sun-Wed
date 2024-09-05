@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 
-
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     val permissionLauncher =
         //      key    value
@@ -53,7 +52,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     var marker: Marker? = null
     var googleMap: GoogleMap? = null
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    // Lazy initialization
+    // Memory Consumption
+    val fusedLocationProviderClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(this)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,7 +68,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             isPermissionAllowed(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
             // Access the location
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
             val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment?
             mapFragment?.getMapAsync(this)
@@ -205,3 +211,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // 3- Integrate with google maps
 
 }
+
+
